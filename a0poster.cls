@@ -1,18 +1,18 @@
 %$Id: a0poster.cls,v 1.5 1999/04/05 14:49:56 mjf Exp $
-%% 
+%%
 %% This is file `a0poster.cls'
-%% 
+%%
 %% Copyright (C) 07.05.97 Gerlinde Kettl and Matthias Weiser
 %%
-%% Problems, bugs and comments to 
+%% Problems, bugs and comments to
 %% gerlinde.kettl@physik.uni-regensburg.de
-%% 
+%%
 %% changed textwidths and margins to cope with printable area and
 %% frame.  Make sure that the offsets are set to -1in!
 %% Also changed scaling for a0->a4, since this was wrong.
 
 %% This version changed by Hugh Pumphrey on 4.5.1999. Every instance
-%% of the string ``draft'' replaced by the string ``preview''. This gives 
+%% of the string ``draft'' replaced by the string ``preview''. This gives
 %% an a4 size preview but includes the postscript figures
 
 \ProvidesClass{a0poster}[1997/05/07 v1.21b a0poster class (GK, MW)]
@@ -150,10 +150,10 @@
 \input{a0size.sty}
 
 \renewcommand{\tiny}{\fontsize{12}{14}\selectfont}
-\renewcommand{\scriptsize}{\fontsize{14.4}{18}\selectfont}   
+\renewcommand{\scriptsize}{\fontsize{14.4}{18}\selectfont}
 \renewcommand{\footnotesize}{\fontsize{17.28}{22}\selectfont}
 \renewcommand{\small}{\fontsize{20.74}{25}\selectfont}
-\renewcommand{\normalsize}{\fontsize{24.88}{30}\selectfont}
+\renewcommand{\normalsize}{\fontsize{29.86}{37}\selectfont}
 \renewcommand{\large}{\fontsize{29.86}{37}\selectfont}
 \renewcommand{\Large}{\fontsize{35.83}{45}\selectfont}
 \renewcommand{\LARGE}{\fontsize{43}{54}\selectfont}
@@ -200,5 +200,5 @@
 \pagestyle{empty}}
 
 \endinput
-%% 
+%%
 %% End of file `a0poster.cls'.

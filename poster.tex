@@ -76,7 +76,6 @@
 
 %----------------------------------------------------------------------------%	Introduction
 %----------------------------------------------------------------------------
-\color{Navy}
 
 \section*{Introduction}
 
@@ -92,84 +91,128 @@ image data sets, but comparing these systems is a complex task that requires a
 high degree of expertise. This makes the selection of a system for specific
 analysis tasks, and for the creation of an analysis pipeline a daunting task.
 
-%----------------------------------------------------------------------------%	OBJECTIVES
-%----------------------------------------------------------------------------
-\color{DarkSlateGray} % DarkSlateGray color for the rest of the content
-
-\section*{Objectives}
+\color{Navy}
 
 We compared several big data software systems and benchmarked their performance
 in a state-of-the-art data processing and analysis pipeline with human
 neuroimaging data.
 
-\subsection*{Apache Spark (\texttt{http://spark.apache.org/})}
-\includegraphics[width=10cm]{spark-logo.png}
+\color{DarkSlateGray}
+
+\begin{minipage}[b]{0.75\linewidth}
+  \subsection*{Apache Spark}
+\end{minipage}
+\begin{minipage}[b]{0.25\linewidth}
+  \includegraphics[width=7cm]{spark-logo.png}
+\end{minipage}
+
+(\texttt{http://spark.apache.org/})
+
+\small
+
 \begin{itemize}
-\item Open-source parallel processing framework that enables users
-to run large-scale data analytics applications across clustered computers.
+\item Open-source parallel processing framework that enables users to run large-scale data analytics applications across clustered computers.
 
-\item Dataflow-based execution system that provides a functional,
-collection-oriented API.
+\item Dataflow-based execution system that provides a functional, collection-oriented API.
 
-\item Parallel tasks are described as a directed acyclic graph (DAG) --
-resilience against transient failures by tracking computational lineage
+\item Parallel tasks are described as a directed acyclic graph (DAG) -- resilience against transient failures by tracking computational lineage
 
 \item Optimizes for data locality when scheduling work.
 
 \item Programming interfaces in Scala, Java, and Python.
 
-\subsection*{Myria (\texttt{http://myria.cs.washington.edu/})}
-\includegraphics[width=10cm]{myria-logo.png}
+\end{itemize}
 
-\item Distributed, ``shared-nothing'' big data management system from the
-University of Washington.
+\begin{minipage}[b]{0.75\linewidth}
+  \subsection*{Myria}
+\end{minipage}
+\begin{minipage}[b]{0.25\linewidth}
+  \includegraphics[width=7cm]{myria-logo.png}
+\end{minipage}
 
-\item Derives requirements from real users and complex
-workflows, especially in science.
+\textbf{(\texttt{http://myria.cs.washington.edu/})}
+\begin{itemize}
+  \item Distributed, ``shared-nothing'' big data management system from the University of Washington.
 
-\item Provides a programming model that extends relational algebra with
-iteration that affords rich, iteration-aware optimization without sacrificing
-expressive power.
+  \item  Derives requirements from real users and complex workflows, especially in science.
 
-\item Supports user defined functions (UDFs) in Python.
+   \item Provides a programming model that extends relational algebra with iteration that affords rich, iteration-aware optimization without sacrificing expressive power.
 
-\item Also provided as a cloud service that users can access directly
-through their browser or through a Jupyter notebook.
+   \item Supports user defined functions (UDFs) in Python.
 
-\subsection*{Rasdaman (\texttt{http://www.rasdaman.org/})}
+   \item Also provided as a cloud service that users can access directly through their browser or through a Jupyter notebook.
 
-\item An array database management system designed for storing and
-querying high-dimensional arrays (such as images).
+\end{itemize}
+\begin{minipage}[b]{0.75\linewidth}
+  \subsection*{Rasdaman}
+\end{minipage}
+\begin{minipage}[b]{0.25\linewidth}
+  \includegraphics[width=6cm]{rasdaman-logo.png}
+\end{minipage}
 
-\item  In addition to conventional SQL queries, it allows users to manipulate arrays directly in its own query language called Rasdaman Query
-Language (Rasql).
+(\texttt{http://www.rasdaman.org/})
+\begin{itemize}
+\item An array database management system designed for storing and querying high-dimensional arrays (such as images).
+
+\item In addition to conventional SQL queries, it allows users to manipulate arrays directly in its own query language called Rasdaman Query Language (Rasql).
 
 \item Also supports other language bindings such as C++, Java, and Python (only available in the Enterprise version).
 
 \item Redirects the data to the underlying database systems (e.g., PostgreSQL, SQLite) or file systems.
 
-\item Users interact with Rasdaman mostly via queries, either through Rasql or
-programming interfaces; as a consequence, migrating an application to Rasdaman
-usually requires development effort to translate application logic to queries,
-and to glue different stages of the pipeline
+\item Users interact with Rasdaman mostly via queries, either through Rasql or programming interfaces; as a consequence, migrating an application to Rasdaman usually requires development effort to translate application logic to queries, and to glue different stages of the pipeline
+\end{itemize}
 
-\subsection*{TensorFlow} \includegraphics[width=10cm]{tensor-flow-logo.png}
+\begin{minipage}[b]{0.75\linewidth}
+  \subsection*{TensorFlow}
+\end{minipage}
+\begin{minipage}[b]{0.25\linewidth}
+  \includegraphics[height=4cm]{tensor-flow-logo.png}
+\end{minipage}
 
+\textbf{(\texttt{https://www.tensorflow.org/})}
+\begin{itemize}
+  \item A
+  \item B
+  \item C
 \end{itemize}
 
 %----------------------------------------------------------------------------%	MATERIALS AND METHODS
 %----------------------------------------------------------------------------
-
+\normalsize
 \section*{Materials and Methods}
+The human connectome can be assessed \emph{in vivo} using MRI. Diffusion MRI
+(dMRI) is used to evaluate the microstructure of white matter, and the local orientation of nerve fibers in each voxel.
 
-We analyzed diffusion MRI data provided by the Human Connectome Project.
+\subsection*{Data}
 
-Data analysis was based on functions implemented in the open-source Dipy
-software (\texttt{http://dipy.org}). \\
+Measurements were obtained from the Human Connectome Project
 
-\includegraphics[width=12cm]{dipy-logo.png}
+(\texttt{https://www.humanconnectome.org/}). Measurements in 288 directions of diffusion were obtained at a 1.25 x 1.25 x 1.25 $mm^3$ resolution.
 
-All experiments were run using the AWS r3.2xlarge instance type, optimized for memory-intensive applications (lower price per GiB of RAM): each instance has 8 vCPU, 61 GiB Memory and 160 GB SSD storage.
+A typical pipeline of MRI analysis might include several steps. We focus here on:
+\begin{itemize}
+
+  \item Segmentation: the part of the image containing the brain is identified using the median Otsu algorithm \cite{Otsu1975-qg}.
+
+  \item Denoising: the image within this brain mask is denoise using the non-local means algorithm \cite{Coupe2008-bx}.
+
+ \item Model fitting: a model is fit in every voxel of the measurement. We used the classic DTI model \cite{Basser1994-hg}.
+
+\end{itemize}
+
+\includegraphics[width=25cm]{pipeline.png}
+
+\begin{minipage}[b]{0.75\linewidth}
+  Data analysis was based on functions implemented in the open-source Dipy
+  software (\texttt{http://dipy.org}).
+\end{minipage}
+\begin{minipage}[b]{0.25\linewidth}
+  \includegraphics[width=5cm]{dipy-logo.png}
+\end{minipage}
+
+\subsection*{Computational experiments}
+We used AWS r3.2xlarge instance type, optimized for memory-intensive applications (lower price per GiB of RAM): each instance has 8 vCPU, 61 GiB Memory and 160 GB SSD storage.
 
 \textbf{Pure Python}: The reference implementation was run on a single instance.
 
@@ -183,11 +226,9 @@ workers. We used spark-1.6.1-bin-hadoop1, in standalone mode with HDFS as the
 storage layer. We also used thunder 0.6.0 (\texttt{http://thunder-project.org/})
 to set up spark.
 
-
 \textbf{Rasdaman}: Four compute nodes were used and the default configuration:
 nine Rasdaman server processes on each node. We made reasonable effort to push
 certain application operations into Rasdaman’s query engine.
-
 
 %------------------------------------------------
 
@@ -196,62 +237,37 @@ certain application operations into Rasdaman’s query engine.
 %----------------------------------------------------------------------------
 \section*{Results}
 
-Text text text
-%
-\begin{wraptable}{l}{12cm} % Left or right alignment is specified in the first bracket, the width of the table is in the second
-\begin{tabular}{l l l}
-\toprule
-\textbf{Treatments} & \textbf{Response 1} & \textbf{Response 2}\\
-\midrule
-Treatment 1 & 0.0003262 & 0.562 \\
-Treatment 2 & 0.0015681 & 0.910 \\
-Treatment 3 & 0.0009271 & 0.296 \\
-\bottomrule
-\end{tabular}
-\captionof{table}{\color{Green} Table caption}
-\end{wraptable}
-%
+\begin{minipage}[b]{0.5\linewidth}
+  \includegraphics[width=17cm]{DataIngestion.png}
+\end{minipage}
+\begin{minipage}[b]{0.5\linewidth}
+  \includegraphics[width=17cm]{Segmentation.png}
+\end{minipage}
 
-Text text text
-\begin{center}\vspace{1cm}
-\includegraphics[width=0.8\linewidth]{placeholder}
-\captionof{figure}{\color{Green} Figure caption}
-\end{center}\vspace{1cm}
 
-Text text text
+\begin{minipage}[b]{0.5\linewidth}
+  \includegraphics[width=17cm]{Denoising.png}
+\end{minipage}
+\begin{minipage}[b]{0.5\linewidth}
+  \includegraphics[width=17cm]{ModelFit.png}
+\end{minipage}
 
-\begin{center}\vspace{1cm}
-\begin{tabular}{l l l l}
-\toprule
-\textbf{Treatments} & \textbf{Response 1} & \textbf{Response 2} \\
-\midrule
-Treatment 1 & 0.0003262 & 0.562 \\
-Treatment 2 & 0.0015681 & 0.910 \\
-Treatment 3 & 0.0009271 & 0.296 \\
-\bottomrule
-\end{tabular}
-\captionof{table}{\color{Green} Table caption}
-\end{center}\vspace{1cm}
 
-Text text text
-
-\begin{center}\vspace{1cm}
-\includegraphics[width=0.8\linewidth]{placeholder}
-\captionof{figure}{\color{Green} Figure caption}
-\end{center}\vspace{1cm}
-
-%----------------------------------------------------------------------------%	CONCLUSIONS
-%----------------------------------------------------------------------------
 
 \color{SaddleBrown} % SaddleBrown color for the conclusions to make them stand out
 
 \section*{Conclusions}
 
 \begin{itemize}
-\item Pellentesque eget orci eros. Fusce ultricies, tellus et pellentesque fringilla, ante massa luctus libero, quis tristique purus urna nec nibh. Phasellus fermentum rutrum elementum. Nam quis justo lectus.
-\item Vestibulum sem ante, hendrerit a gravida ac, blandit quis magna.
-\item Donec sem metus, facilisis at condimentum eget, vehicula ut massa. Morbi consequat, diam sed convallis tincidunt, arcu nunc.
-\item Nunc at convallis urna. isus ante. Pellentesque condimentum dui. Etiam sagittis purus non tellus tempor volutpat. Donec et dui non massa tristique adipiscing.
+
+\item Myria performs faster than other systems for most tasks. This is probably due to reduced serialization cost, which other systems incur.
+
+\item Rasdaman requires significant rewriting of algorithms to be used.
+
+\item  Spark error handling can be cryptic, because it uses the JVM.
+
+\item TensorFlow is still under heavy development, and might be much more performant in the future.
+
 \end{itemize}
 
 \color{DarkSlateGray} % Set the color back to DarkSlateGray for the rest of the content
@@ -261,13 +277,16 @@ Text text text
 
 \section*{Future directions}
 
-Text text text
- %---------------------------------------------------------------------------	REFERENCES
+Future developments include the development of user-defined aggregations in Myria.
+
+Myria will also serve as the computational backend for web-based image processing pipelines we will provide as a service.
+
+%---------------------------------------------------------------------------	REFERENCES
 %----------------------------------------------------------------------------
 
 \nocite{*} % Print all references regardless of whether they were cited in the poster or not
 \bibliographystyle{plain} % Plain referencing style
-\bibliography{poster} % Use the example bibliography file sample.bib
+\small \bibliography{poster} % Use the example bibliography file sample.bib
 
 %----------------------------------------------------------------------------%	ACKNOWLEDGEMENTS
 %----------------------------------------------------------------------------

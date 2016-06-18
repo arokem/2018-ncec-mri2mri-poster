@@ -1,0 +1,61 @@
+Pipeline,Task,Duration
+Pure Python,Data ingestion,0.074495
+Pure Python,Data ingestion,0.074712
+Spark,Data ingestion,114.699396
+Spark,Data ingestion,99.603825
+Spark,Data ingestion,90.730307
+Spark,Data ingestion,132.39584
+Myria,Data ingestion,102.16157
+Myria,Data ingestion,101.94517
+Myria,Data ingestion,101.67198
+Myria,Data ingestion,101.9336663
+Rasdaman,Data ingestion,256.5183191
+Rasdaman,Data ingestion,205.2319548
+Rasdaman,Data ingestion,210.4367471
+Rasdaman,Data ingestion,221.8792203
+TensorFlow,Data ingestion,26.7
+Myria,Segmentation,31.843455
+Myria,Segmentation,31.856361
+Myria,Segmentation,32.037226
+Pure Python,Segmentation,31.788013
+Pure Python,Segmentation,31.87608
+Pure Python,Segmentation,31.791963
+Spark,Segmentation,115.556248
+Spark,Segmentation,142.072019
+Spark,Segmentation,136.994715
+Spark,Segmentation,130.366215
+Rasdaman,Segmentation,44.717
+Rasdaman,Segmentation,44.823
+Rasdaman,Segmentation,44.723
+Rasdaman,Segmentation,44.758
+TensorFlow,Segmentation,404
+Pure Python,Denoising,4461.444828
+Pure Python,Denoising,4498.91964
+Pure Python,Denoising,4442.42168
+Spark,Denoising,823.429766
+Spark,Denoising,833.984632
+Spark,Denoising,812.537361
+Spark,Denoising,832.636385
+Myria,Denoising,691.852576
+Myria,Denoising,691.87093
+Rasdaman,Denoising,1271
+Rasdaman,Denoising,1276
+Rasdaman,Denoising,1266
+Rasdaman,Denoising,1303
+TensorFlow,Denoising,185500
+Pure Python,Model fit,231.507421
+Pure Python,Model fit,231.210253
+Pure Python,Model fit,231.555493
+Spark,Model fit,208.209351
+Spark,Model fit,197.603215
+Spark,Model fit,208.032228
+Spark,Model fit,196.178655
+Myria,Model fit,77.82799466
+Myria,Model fit,78.51614903
+Myria,Model fit,78.30753989
+Myria,Model fit,78.18512065
+Rasdaman,Model fit,181.096
+Rasdaman,Model fit,184.855
+Rasdaman,Model fit,165.051
+Rasdaman,Model fit,164.865
+TensorFlow,Model fit,

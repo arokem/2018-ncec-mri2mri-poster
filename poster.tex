@@ -160,7 +160,7 @@ neuroimaging data.
 
 \item Redirects the data to the underlying database systems (e.g., PostgreSQL, SQLite) or file systems.
 
-\item Users interact with Rasdaman mostly via queries, either through Rasql or programming interfaces; as a consequence, migrating an application to Rasdaman usually requires development effort to translate application logic to queries, and to glue different stages of the pipeline
+\item Users interact with Rasdaman mostly via queries, either through Rasql or programming interfaces; as a consequence, migrating an application to Rasdaman usually requires development effort to translate application logic to queries, and to glue different stages of the pipeline.
 \end{itemize}
 
 \begin{minipage}[b]{0.75\linewidth}
@@ -232,7 +232,7 @@ per CPU, for a total of thirty-two workers. We used spark-1.6.1-bin-hadoop1, in
 standalone mode with HDFS as the storage layer. We also used thunder 0.6.0
 (\texttt{http://thunder-project.org/}) to set up spark.
 
-\textbf{Rasdaman}: We used the default configuration with  nine Rasdaman server processes on each node. We made reasonable effort to push certain application operations into Rasdaman’s query engine.
+\textbf{Rasdaman}: We used the default configuration with  nine Rasdaman server processes on each node. We made reasonable effort to push certain application operations into Rasdaman's query engine.
 
 %------------------------------------------------
 

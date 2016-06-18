@@ -1,6 +1,6 @@
 Pipeline,Task,Duration
-Pure Python,Data ingestion,0.074495
-Pure Python,Data ingestion,0.074712
+Reference,Data ingestion,0.074495
+Reference,Data ingestion,0.074712
 Spark,Data ingestion,114.699396
 Spark,Data ingestion,99.603825
 Spark,Data ingestion,90.730307
@@ -17,9 +17,9 @@ TensorFlow,Data ingestion,26.7
 Myria,Segmentation,31.843455
 Myria,Segmentation,31.856361
 Myria,Segmentation,32.037226
-Pure Python,Segmentation,31.788013
-Pure Python,Segmentation,31.87608
-Pure Python,Segmentation,31.791963
+Reference,Segmentation,31.788013
+Reference,Segmentation,31.87608
+Reference,Segmentation,31.791963
 Spark,Segmentation,115.556248
 Spark,Segmentation,142.072019
 Spark,Segmentation,136.994715
@@ -29,9 +29,9 @@ Rasdaman,Segmentation,44.823
 Rasdaman,Segmentation,44.723
 Rasdaman,Segmentation,44.758
 TensorFlow,Segmentation,404
-Pure Python,Denoising,4461.444828
-Pure Python,Denoising,4498.91964
-Pure Python,Denoising,4442.42168
+Reference,Denoising,4461.444828
+Reference,Denoising,4498.91964
+Reference,Denoising,4442.42168
 Spark,Denoising,823.429766
 Spark,Denoising,833.984632
 Spark,Denoising,812.537361
@@ -43,9 +43,9 @@ Rasdaman,Denoising,1276
 Rasdaman,Denoising,1266
 Rasdaman,Denoising,1303
 TensorFlow,Denoising,185500
-Pure Python,Model fit,231.507421
-Pure Python,Model fit,231.210253
-Pure Python,Model fit,231.555493
+Reference,Model fit,231.507421
+Reference,Model fit,231.210253
+Reference,Model fit,231.555493
 Spark,Model fit,208.209351
 Spark,Model fit,197.603215
 Spark,Model fit,208.032228

@@ -65,7 +65,7 @@
 %\end{minipage}
 %
 \begin{minipage}[b]{0.19\linewidth}
-\includegraphics[width=10cm]{UWlogo.png} % Logo or a photo of you, adjust its dimensions here
+\includegraphics[width=10cm]{UWlogo.png}
 \end{minipage}
 
 \vspace{0.5cm} % A bit of extra whitespace between the header and poster content
@@ -83,23 +83,77 @@
 The analysis of image data has been a central part of neuroscience research
 since its very beginning, but with the more recent accelerated development of
 methods to image and record the brain at many different scales, large
-collections of digital image data have become available. The size, diversity and complexity of these data have thrust neuroscience researchers into the era of \emph{big data}.
+collections of digital image data have become available. The size, diversity and
+complexity of these data have thrust neuroscience researchers into the era of
+\emph{big data}.
+
+There are many software systems that can be harnessed for the analysis of large
+image data sets, but comparing these systems is a complex task that requires a
+high degree of expertise. This makes the selection of a system for specific
+analysis tasks, and for the creation of an analysis pipeline a daunting task.
 
 %----------------------------------------------------------------------------%	OBJECTIVES
 %----------------------------------------------------------------------------
 \color{DarkSlateGray} % DarkSlateGray color for the rest of the content
 
 \section*{Objectives}
-We compared several systems for the analysis and benchmarked their
-performance in a state-of-the-art data processing and analysis pipeline with
-human neuroimaging data
 
+We compared several big data software systems and benchmarked their performance
+in a state-of-the-art data processing and analysis pipeline with human
+neuroimaging data.
+
+\subsection*{Apache Spark (\texttt{http://spark.apache.org/})}
+\includegraphics[width=10cm]{spark-logo.png}
 \begin{itemize}
+\item Open-source parallel processing framework that enables users
+to run large-scale data analytics applications across clustered computers.
 
-\item Spark
-\item Myria
-\item Rasdaman
-\item TensorFlow
+\item Dataflow-based execution system that provides a functional,
+collection-oriented API.
+
+\item Parallel tasks are described as a directed acyclic graph (DAG) --
+resilience against transient failures by tracking computational lineage
+
+\item Optimizes for data locality when scheduling work.
+
+\item Programming interfaces in Scala, Java, and Python.
+
+\subsection*{Myria (\texttt{http://myria.cs.washington.edu/})}
+\includegraphics[width=10cm]{myria-logo.png}
+
+\item Distributed, ``shared-nothing'' big data management system from the
+University of Washington.
+
+\item Derives requirements from real users and complex
+workflows, especially in science.
+
+\item Provides a programming model that extends relational algebra with
+iteration that affords rich, iteration-aware optimization without sacrificing
+expressive power.
+
+\item Supports user defined functions (UDFs) in Python.
+
+\item Also provided as a cloud service that users can access directly
+through their browser or through a Jupyter notebook.
+
+\subsection*{Rasdaman (\texttt{http://www.rasdaman.org/})}
+
+\item An array database management system designed for storing and
+querying high-dimensional arrays (such as images).
+
+\item  In addition to conventional SQL queries, it allows users to manipulate arrays directly in its own query language called Rasdaman Query
+Language (Rasql).
+
+\item Also supports other language bindings such as C++, Java, and Python (only available in the Enterprise version).
+
+\item Redirects the data to the underlying database systems (e.g., PostgreSQL, SQLite) or file systems.
+
+\item Users interact with Rasdaman mostly via queries, either through Rasql or
+programming interfaces; as a consequence, migrating an application to Rasdaman
+usually requires development effort to translate application logic to queries,
+and to glue different stages of the pipeline
+
+\subsection*{TensorFlow} \includegraphics[width=10cm]{tensor-flow-logo.png}
 
 \end{itemize}
 
@@ -108,10 +162,32 @@ human neuroimaging data
 
 \section*{Materials and Methods}
 
-We analyzed data provided by the Human Connectome Project
+We analyzed diffusion MRI data provided by the Human Connectome Project.
 
 Data analysis was based on functions implemented in the open-source Dipy
-software.
+software (\texttt{http://dipy.org}). \\
+
+\includegraphics[width=12cm]{dipy-logo.png}
+
+All experiments were run using the AWS r3.2xlarge instance type, optimized for memory-intensive applications (lower price per GiB of RAM): each instance has 8 vCPU, 61 GiB Memory and 160 GB SSD storage.
+
+\textbf{Pure Python}: The reference implementation was run on a single instance.
+
+\textbf{Myria}:  Four compute nodes and one master node. Each compute node ran
+four workers making for a total of sixteen workers. For this image processing
+pipeline, Myria was setup with PostgreSQL as the per-node, local storage layer (default configuration).
+
+\textbf{Spark}: Four compute nodes and one master node, Each compute node ran
+eight workers; spark default is one worker per CPU, for a total of thirty-two
+workers. We used spark-1.6.1-bin-hadoop1, in standalone mode with HDFS as the
+storage layer. We also used thunder 0.6.0 (\texttt{http://thunder-project.org/})
+to set up spark.
+
+
+\textbf{Rasdaman}: Four compute nodes were used and the default configuration:
+nine Rasdaman server processes on each node. We made reasonable effort to push
+certain application operations into Rasdaman’s query engine.
+
 
 %------------------------------------------------
 
@@ -199,7 +275,12 @@ Text text text
 
 This research was supported through a grant from the Gordon \& Betty Moore
 Foundation and the Alfred P. Sloan Foundation to the University of Washington
-eScience Institute
+eScience Institute and through grants from the National Science Foundation
+
+\includegraphics[height=2.5cm]{eSciencelogo.png}
+\includegraphics[height=2.5cm]{SloanLogo.png}
+\includegraphics[height=2.5cm]{MooreFdn.png}
+\includegraphics[height=2.5cm]{NSFLogo}
 %----------------------------------------------------------------------------
 
 \end{multicols}

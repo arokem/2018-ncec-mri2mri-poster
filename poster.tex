@@ -18,7 +18,7 @@
 %	PACKAGES AND OTHER DOCUMENT CONFIGURATIONS
 %----------------------------------------------------------------------------------------
 
-\documentclass[a0,landscape]{a0poster}
+\documentclass[a0, landscape]{a0poster}
 
 \usepackage{multicol} % This is so we can have multiple columns of text side-by-side
 \columnsep=100pt % This is the amount of white space between the columns in the poster
@@ -48,11 +48,11 @@
 % The widths of these boxes can be easily edited to accommodate your content as you see fit
 
 \begin{minipage}[b]{0.85\linewidth}
-\veryHuge \color{NavyBlue} \textbf{Comparing systems for analyzing big neuroscience imaging data} \color{Black}\\ % Title
+\veryHuge \color{NavyBlue} \textbf{Diffusion Kurtosis Imaging for the Human Connectome Project} \color{Black}\\ % Title
 %\Huge\textit{An Exploration of Complexity}\\[1cm] % Subtitle
-\huge \textbf{Parmita Mehta, Sven Dorkenwald, Dongfang Zhao, Magda Balazinska, Alvin Cheung \& Ariel Rokem}\\ % Author(s)
-\Large Computer Science and Engineering and the eScience Institute, University of Washington \\ % University/organization
-\Large Contact: \texttt{arokem@uw.edu} $|$ Download: \texttt{http://arokem.org/presentations/neurofutures2016.html}
+\huge \textbf{Ariel Rokem\textsuperscript{1}, Libby Huber\textsuperscript{2}, Parmita Mehta\textsuperscript{3}, Rafael Neto Henriques\textsuperscript{4}, Magda Balazinska\textsuperscript{3} \& Jason Yeatman\textsuperscript{2}}\\ % Author(s)
+\Large 1. The eScience Institute, 2. ILABS, 3. Computer Science and Engineering, Univ. of Washington \& 4. MRC Cognition and Brain Sci., Univ. of Cambridge\\ % University/organization
+\Large Contact: \texttt{arokem@uw.edu} $|$ Download: \texttt{http://arokem.org/presentations/sfn2016.html}
 \end{minipage}
 %
 %\begin{minipage}[b]{0.25\linewidth}
@@ -66,6 +66,7 @@
 %
 \begin{minipage}[b]{0.19\linewidth}
 \includegraphics[width=10cm]{UWlogo.png}
+\includegraphics[width=8cm]{Camlogo.png}
 \end{minipage}
 
 \vspace{0.5cm} % A bit of extra whitespace between the header and poster content
@@ -79,25 +80,153 @@
 
 \section*{Introduction}
 
-The analysis of image data has been a central part of neuroscience research
-since its very beginning, but with the more recent accelerated development of
-methods to image and record the brain at many different scales, large
-collections of digital image data have become available. The size, diversity and
-complexity of these data have thrust neuroscience researchers into the era of
-\emph{big data}.
+\subsection*{The Human Connectome Project}
 
-There are many software systems that can be harnessed for the analysis of large
-image data sets, but comparing these systems is a complex task that requires a
-high degree of expertise. This makes the selection of a system for specific
-analysis tasks, and for the creation of an analysis pipeline a daunting task.
+Diffusion MRI (dMRI) measurements provide detailed information about human brain
+connectivity and microstructure \emph{in vivo}. HCP is measuring high-quality
+multi-modal MRI data from 1,200 individuals and make these data publcly
+available \cite{VanEssen2012}. It has already made measurements from
+approximately 900 subjects available through Amazon's Simple Storage Service
+(S3).
+
+\subsection*{What model should we use to explain the data?}
+
+\subsection*{Diffusion Tensor Imaging (DTI)}
+
+Approximates diffusion in every voxel as a Gaussian distribution
+\cite{Basser1994-hg}:
+
+\vspace{2mm}
+\begin{center}
+\begin{large}
+
+$S(\theta, b) = S_0 e^{\theta^T \mathbf{Q} \theta} $
+
+\end{large}
+\end{center}
+\vspace{2mm}
+
+\noindent $b$ is the \textbf {b-value},
+
+\noindent $S_0$ is the signal in the absence of diffusion gradient sensitization ($b=0$)
+
+\noindent $\mathbf{Q}$ is a positive-definite quadratic form:
+
+\vspace{2mm}
+\begin{center}
+
+$\mathbf{D} = \begin{pmatrix} \sigma_{xx} & \sigma_{xy} & \sigma_{xz} \\
+                              \sigma_{yx} & \sigma_{yy} & \sigma_{yz} \\
+				                      \sigma_{zx} & \sigma_{zy} & \sigma_{zz} \\
+\end{pmatrix} $
+
+\end{center}
+\vspace{2mm}
+
+\subsubsection*{DTI: 6 parameters}
+
+\subsection*{Diffusion Kurtosis imaging (DKI)}
+
+DKI is an extension of DTI that accounts for non-Gaussian behavior in complex tissue, with many barriers to the diffusion process (cell membranes,
+myelin sheaths, etc.) \cite{Jensen2005-vr}:
+
+\vspace{2mm}
+\begin{center}
+\begin{large}
+
+$ S(\theta, b)=S_{0}e^{-bD(\theta)+\frac{1}{6}b^{2}D(\theta)^{2}K(\theta)}$
+
+\vspace{2mm}
+\end{large}
+\end{center}
+
+\vspace{2mm}
+\begin{center}
+\begin{large}
+
+$D(\theta)=\sum_{i=1}^{3}\sum_{j=1}^{3}\theta_{i}\theta_{j}Q_{ij}$
+
+\vspace{2mm}
+\end{large}
+\end{center}
+
+\vspace{2mm}
+\begin{center}
+\begin{large}
+
+$K(\theta)=\frac{MD^{2}}{D(\theta)^{2}}\sum_{i=1}^{3}\sum_{j=1}^{3}\sum_{k=1}^{3} \sum_{l=1}^{3}\theta_{i}\theta_{j}\theta_{k}\theta_{l}W_{ijkl}$
+
+\vspace{2mm}
+\end{large}
+\end{center}
+
+$\mathbf{W}$ is a rank 4 tensor (3-by-3-by-3-by-3 matrix).
+
+\subsubsection*{DKI: 21 parameters}
+
+\subsubsection*{Diffusion Statistics}
+
+\begin{itemize}
+
+\item Mean diffusivity (\textbf{MD}) characterizes the mean displacement of
+water molecules within a voxel.
+
+\item Fractional anisotropy (\textbf{FA}) characterizes the variance in
+diffusivity in different directions.
+
+\end{itemize}
+
+\noindent Variance in these parameters accounts for variance in psychiatric and
+neurological disorders, normal development and aging, and psychological traits.
+
+\large
+\textbf{Brain measurements that provide a close tie between brain tissue properties and behavior}.
+
+\subsubsection*{K-fold cross-validation}
 
 \color{Navy}
 
-We compared several big data software systems and benchmarked their performance
-in a state-of-the-art data processing and analysis pipeline with human
-neuroimaging data.
+%----------------------------------------------------------------------------%	MATERIALS AND METHODS
+%----------------------------------------------------------------------------
+\normalsize
+\section*{Materials and Methods}
+
+\subsection*{Data}
+
+Measurements were obtained from the WU-Minn Human Connectome Project consortium
+(\texttt{https://www.humanconnectome.org/}) through AWS S3
+
+Of the 900 subjects that are available, 788 subjects have full diffusion
+measurements: 270 diffusion weighted directions in 3 different b-values (90 directions each): 1,000, 2,000 and 3,000 $s/mm^2$
+
+Measurements were obtained at a 1.25 x 1.25 x 1.25 $mm^3$ resolution.
+
+A T1-weighted measurement was also obtained, and \emph{Freesurfer} was used to
+segment the image into different tissue types. We focused our analysis only on
+the parts of the volume that contained the white matter.
 
 \color{DarkSlateGray}
+
+\begin{minipage}[b]{0.75\linewidth}
+  \subsection*{Dipy (Diffusion Imaging in Python)}
+\end{minipage}
+\begin{minipage}[b]{0.25\linewidth}
+  \includegraphics[height=2cm]{dipy-logo.png}
+\end{minipage}
+
+(\texttt{http://dipy.org/})
+
+\small
+
+\begin{itemize}
+\item Open-source software for the analysis
+
+\item Implemented in Python. Performance is enhanced using Cython and OpenMP
+
+\item Contains implementations of many dMRI models, including DTI, DKI and others
+
+\end{itemize}
+
 
 \begin{minipage}[b]{0.75\linewidth}
   \subsection*{Apache Spark}
@@ -123,116 +252,11 @@ neuroimaging data.
 
 \end{itemize}
 
-\begin{minipage}[b]{0.75\linewidth}
-  \subsection*{Myria}
-\end{minipage}
-\begin{minipage}[b]{0.25\linewidth}
-  \includegraphics[height=2cm]{myria-logo.png}
-\end{minipage}
-
-(\texttt{http://myria.cs.washington.edu/})
-\begin{itemize}
-  \item Distributed, ``shared-nothing'' big data management system from the University of Washington.
-
-  \item  Derives requirements from real users and complex workflows, especially in science.
-
-   \item Provides a programming model that extends relational algebra with iteration that affords rich, iteration-aware optimization without sacrificing expressive power.
-
-   \item Supports user defined functions (UDFs) in Python.
-
-   \item Also provided as a cloud service that users can access directly through their browser or through a Jupyter notebook.
-
-\end{itemize}
-\begin{minipage}[b]{0.75\linewidth}
-  \subsection*{Rasdaman}
-\end{minipage}
-\begin{minipage}[b]{0.25\linewidth}
-  \includegraphics[height=3cm]{rasdaman-logo.png}
-\end{minipage}
-
-(\texttt{http://www.rasdaman.org/})
-\begin{itemize}
-\item An array database management system designed for storing and querying high-dimensional arrays (such as images).
-
-\item In addition to conventional SQL queries, it allows users to manipulate arrays directly in its own query language called Rasdaman Query Language (Rasql).
-
-\item Also supports other language bindings such as C++, Java, and Python (only available in the Enterprise version).
-
-\item Redirects the data to the underlying database systems (e.g., PostgreSQL, SQLite) or file systems.
-
-\item Users interact with Rasdaman mostly via queries, either through Rasql or programming interfaces; as a consequence, migrating an application to Rasdaman usually requires development effort to translate application logic to queries, and to glue different stages of the pipeline.
-\end{itemize}
-
-\begin{minipage}[b]{0.75\linewidth}
-  \subsection*{TensorFlow}
-\end{minipage}
-\begin{minipage}[b]{0.25\linewidth}
-  \includegraphics[height=4cm]{tensor-flow-logo.png}
-\end{minipage}
-
-(\texttt{https://www.tensorflow.org/})
-\begin{itemize}
-
-\item A graph-based framework recently open-sourced from Google, that provides functionality to express operations to manipulate n-dimensional tensors
-
-\item A directed computational graph is defined for operations (nodes) and tensors (edges).
-
-\item The graph is optimizied and can be deployed on local and distributed systems as well as GPUs and mobile devices.
-
-\item Currently, TensorFlow provides a Python and C++ API.
-
-\end{itemize}
-
-%----------------------------------------------------------------------------%	MATERIALS AND METHODS
-%----------------------------------------------------------------------------
-\normalsize
-\section*{Materials and Methods}
-The human connectome can be assessed \emph{in vivo} using MRI. Diffusion MRI
-(dMRI) is used to evaluate the microstructure of white matter, and the local orientation of nerve fibers in each voxel.
-
-\subsection*{Data}
-
-Measurements were obtained from the Human Connectome Project
-
-(\texttt{https://www.humanconnectome.org/}). Measurements in 288 directions of diffusion were obtained at a 1.25 x 1.25 x 1.25 $mm^3$ resolution.
-
-A typical pipeline of MRI analysis might include several steps. We focus here on:
-\begin{itemize}
-
-  \item Segmentation: the part of the image containing the brain is identified using the median Otsu algorithm \cite{Otsu1975-qg}.
-
-  \item Denoising: the image within this brain mask is denoise using the non-local means algorithm \cite{Coupe2008-bx}.
-
- \item Model fitting: a model is fit in every voxel of the measurement. We used the classic DTI model \cite{Basser1994-hg}.
-
-\end{itemize}
-
-\includegraphics[width=25cm]{pipeline.png}
-
-\begin{minipage}[b]{0.75\linewidth}
-  Data analysis was based on functions implemented in the open-source Dipy
-  software (\texttt{http://dipy.org}).
-\end{minipage}
-\begin{minipage}[b]{0.25\linewidth}
-  \includegraphics[width=5cm]{dipy-logo.png}
-\end{minipage}
-
 \subsection*{Computational experiments}
 We used AWS r3.2xlarge instance type, optimized for memory-intensive applications (lower price per GiB of RAM): each instance has 8 vCPU, 61 GiB Memory and 160 GB SSD storage.
 
-\textbf{Pure Python}: The reference implementation was run on a single instance.
-
-For the distributed computing frameworks that we tested, we used four compute
-nodes and one master node.
-
-\textbf{Myria}:   Each compute node ran four workers making for a total of sixteen workers. For this image processing pipeline, Myria was setup with PostgreSQL as the per-node, local storage layer (default configuration).
-
 \textbf{Spark}: Each compute node ran eight workers; spark default is one worker
-per CPU, for a total of thirty-two workers. We used spark-1.6.1-bin-hadoop1, in
-standalone mode with HDFS as the storage layer. We also used thunder 0.6.0
-(\texttt{http://thunder-project.org/}) to set up spark.
-
-\textbf{Rasdaman}: We used the default configuration with  nine Rasdaman server processes on each node. We made reasonable effort to push certain application operations into Rasdaman's query engine.
+per CPU, for a total of thirty-two workers. We used.
 
 %------------------------------------------------
 
@@ -241,33 +265,24 @@ standalone mode with HDFS as the storage layer. We also used thunder 0.6.0
 \section*{Results}
 
 \begin{minipage}[b]{0.5\linewidth}
-  \includegraphics[width=17cm]{DataIngestion.png}
+  \includegraphics[width=17cm]{dti_dki.png}
 \end{minipage}
 \begin{minipage}[b]{0.5\linewidth}
-  \includegraphics[width=17cm]{Segmentation.png}
+  \includegraphics[width=17cm]{dti_1000_dki.png}
 \end{minipage}
-
-
-\begin{minipage}[b]{0.5\linewidth}
-  \includegraphics[width=17cm]{Denoising.png}
-\end{minipage}
-\begin{minipage}[b]{0.5\linewidth}
-  \includegraphics[width=17cm]{ModelFit.png}
-\end{minipage}
-
-
 
 \color{SaddleBrown} % SaddleBrown color for the conclusions to make them stand out
 
 \section*{Conclusions}
-
+\large
 \begin{itemize}
 
-\item Myria performs faster than other systems for most tasks. Some operations still need to be done in Python.
+\item DKI more accurately fits the HCP data than DTI
 
-\item Rasdaman requires significant rewriting of algorithms to be used. Some operations still need to be done in Python.
+\item DKI statistics are more reliable than DTI statistics
 
-\item TensorFlow is still under heavy development, and might be much more performant in the future. Some operations are still not possible (e.g., model fitting)
+\item DKI has the additional benefit that it provides additional parameters that
+lend themselves to a richer biophysical interpretation of the signal.
 
 \end{itemize}
 
@@ -279,9 +294,9 @@ standalone mode with HDFS as the storage layer. We also used thunder 0.6.0
 \section*{Future directions}
 \begin{itemize}
 
-\item Future development: user-defined aggregations in Myria.
+\item Foo
 
-\item Myria will also serve as the computational backend for web-based image processing pipelines we will provide as a service.
+\item Bar
 
 \end{itemize}
 %---------------------------------------------------------------------------	REFERENCES
@@ -293,13 +308,12 @@ standalone mode with HDFS as the storage layer. We also used thunder 0.6.0
 
 %----------------------------------------------------------------------------%	ACKNOWLEDGEMENTS
 %----------------------------------------------------------------------------
-\subsection*{Acknowledgements}
-\footnotesize
-This research was supported through a grant from the Gordon \& Betty Moore
-Foundation and the Alfred P. Sloan Foundation to the University of Washington
-eScience Institute by the National Science Foundation, through NSF grant
-IIS-1247469, and by gifts from Amazon and the Intel Science and Technology
-Center for Big Data.
+\subsection*{Acknowledgements} \footnotesize This research was supported through
+a grant from the Gordon \& Betty Moore Foundation and the Alfred P. Sloan
+Foundation to the University of Washington eScience Institute, through NSF grant
+IIS-1247469, and through gifts from Amazon and the Intel Science and Technology
+Center for Big Data. We are also grateful for research cloud credits from Amazon
+Web Services, and for a Google Summer of Code 2015 fellowship to RNH.
 
 \includegraphics[height=2.5cm]{eSciencelogo.png}
 \includegraphics[height=2.5cm]{SloanLogo.png}

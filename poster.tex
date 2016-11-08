@@ -14,9 +14,9 @@
 %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-%----------------------------------------------------------------------------------------
+%-------------------------------------------------------------------------------
 %	PACKAGES AND OTHER DOCUMENT CONFIGURATIONS
-%----------------------------------------------------------------------------------------
+%-------------------------------------------------------------------------------
 
 \documentclass[a0, landscape]{a0poster}
 
@@ -91,7 +91,7 @@ approximately 900 subjects available through Amazon's Simple Storage Service
 
 \subsection*{What model should we use to explain the data?}
 
-\subsection*{Diffusion Tensor Imaging (DTI)}
+\subsection*{Diffusion Tensor Imaging (DTI): 6 parameters}
 
 Approximates diffusion in every voxel as a Gaussian distribution
 \cite{Basser1994-hg}:
@@ -104,7 +104,6 @@ $S(\theta, b) = S_0 e^{\theta^T \mathbf{Q} \theta} $
 
 \end{large}
 \end{center}
-\vspace{2mm}
 
 \noindent $b$ is the \textbf {b-value},
 
@@ -121,11 +120,8 @@ $\mathbf{D} = \begin{pmatrix} \sigma_{xx} & \sigma_{xy} & \sigma_{xz} \\
 \end{pmatrix} $
 
 \end{center}
-\vspace{2mm}
 
-\subsubsection*{DTI: 6 parameters}
-
-\subsection*{Diffusion Kurtosis imaging (DKI)}
+\subsection*{Diffusion Kurtosis imaging (DKI): 21 parameters}
 
 DKI is an extension of DTI that accounts for non-Gaussian behavior in complex tissue, with many barriers to the diffusion process (cell membranes,
 myelin sheaths, etc.) \cite{Jensen2005-vr}:
@@ -162,9 +158,8 @@ $K(\theta)=\frac{MD^{2}}{D(\theta)^{2}}\sum_{i=1}^{3}\sum_{j=1}^{3}\sum_{k=1}^{3
 
 $\mathbf{W}$ is a rank 4 tensor (3-by-3-by-3-by-3 matrix).
 
-\subsubsection*{DKI: 21 parameters}
-
-\subsubsection*{Diffusion Statistics}
+\vspace{-2mm}
+\subsection*{Diffusion Statistics}
 
 \begin{itemize}
 
@@ -176,100 +171,126 @@ diffusivity in different directions.
 
 \end{itemize}
 
-\noindent Variance in these parameters accounts for variance in psychiatric and
-neurological disorders, normal development and aging, and psychological traits.
-
 \large
-\textbf{Brain measurements that provide a close tie between brain tissue properties and behavior}.
 
-\subsubsection*{K-fold cross-validation}
+\noindent \textbf{Brain measurements that provide a close tie between brain tissue properties and behavior}.
+
+\vfill
+\columnbreak
 
 \color{Navy}
-
-%----------------------------------------------------------------------------%	MATERIALS AND METHODS
-%----------------------------------------------------------------------------
-\normalsize
-\section*{Materials and Methods}
-
-\subsection*{Data}
-
-Measurements were obtained from the WU-Minn Human Connectome Project consortium
-(\texttt{https://www.humanconnectome.org/}) through AWS S3
-
-Of the 900 subjects that are available, 788 subjects have full diffusion
-measurements: 270 diffusion weighted directions in 3 different b-values (90 directions each): 1,000, 2,000 and 3,000 $s/mm^2$
-
-Measurements were obtained at a 1.25 x 1.25 x 1.25 $mm^3$ resolution.
-
-A T1-weighted measurement was also obtained, and \emph{Freesurfer} was used to
-segment the image into different tissue types. We focused our analysis only on
-the parts of the volume that contained the white matter.
-
-\color{DarkSlateGray}
-
-\begin{minipage}[b]{0.75\linewidth}
-  \subsection*{Dipy (Diffusion Imaging in Python)}
-\end{minipage}
-\begin{minipage}[b]{0.25\linewidth}
-  \includegraphics[height=2cm]{dipy-logo.png}
-\end{minipage}
-
-(\texttt{http://dipy.org/})
-
-\small
-
-\begin{itemize}
-\item Open-source software for the analysis
-
-\item Implemented in Python. Performance is enhanced using Cython and OpenMP
-
-\item Contains implementations of many dMRI models, including DTI, DKI and others
-
-\end{itemize}
-
-
-\begin{minipage}[b]{0.75\linewidth}
-  \subsection*{Apache Spark}
-\end{minipage}
-\begin{minipage}[b]{0.25\linewidth}
-  \includegraphics[height=3.5cm]{spark-logo.png}
-\end{minipage}
-
-(\texttt{http://spark.apache.org/})
-
-\small
-
-\begin{itemize}
-\item Open-source parallel processing framework that enables users to run large-scale data analytics applications across clustered computers.
-
-\item Dataflow-based execution system that provides a functional, collection-oriented API.
-
-\item Parallel tasks are described as a directed acyclic graph (DAG) -- resilience against transient failures by tracking computational lineage
-
-\item Optimizes for data locality when scheduling work.
-
-\item Programming interfaces in Scala, Java, and Python.
-
-\end{itemize}
-
-\subsection*{Computational experiments}
-We used AWS r3.2xlarge instance type, optimized for memory-intensive applications (lower price per GiB of RAM): each instance has 8 vCPU, 61 GiB Memory and 160 GB SSD storage.
-
-\textbf{Spark}: Each compute node ran eight workers; spark default is one worker
-per CPU, for a total of thirty-two workers. We used.
-
-%------------------------------------------------
-
 %----------------------------------------------------------------------------%	RESULTS
 %----------------------------------------------------------------------------
 \section*{Results}
 
-\begin{minipage}[b]{0.5\linewidth}
-  \includegraphics[width=17cm]{dti_dki.png}
+\noindent \textbf{We compared DKI and DTI using \emph{K-fold cross-validation}}
+
+\noindent \textbf{We estimated model fit \emph{accuracy} and model parameter \emph{reliability}}
+
+
+\subsection*{Model accuracy}
+\normalsize
+
+\noindent Cross-validated $R^2$: \textbf{A} Comparison of the full distribution
+in a single subject, and comparison of the median (dashed line) in all subjects
+for DKI (all b-values) and DTI (\textbf{B} all b-values, \textbf{C} only b=1,000
+$s/mm^2$  \hfill \break
+
+\begin{minipage}[b]{1\linewidth}
+  \large
+  \textbf{A}
+  \includegraphics[width=9cm]{histogram_cod_dki_dti.png}
+  \textbf{B}
+  \includegraphics[width=9cm]{dti_dki.png}
+  \textbf{C}
+  \includegraphics[width=9cm]{dti_1000_dki.png}
 \end{minipage}
-\begin{minipage}[b]{0.5\linewidth}
-  \includegraphics[width=17cm]{dti_1000_dki.png}
+
+\subsection*{Parameter reliability}
+
+\noindent Parameter reliability is estimated by comparing diffusion-based
+statistics based on a difference in FA/MD between b=1000 and b=1000,2000 (DTI)
+or between b=1000,2000, b=1000,3000 (DKI).
+
+\noindent BIAS is the median difference between sub-samples VARIABILITY is
+the spread of differences (central 95\% of the distribution)
+
+\subsubsection*{Mean diffusivity}
+
+\textbf{A} Single subject distributions. \textbf{B} Bias \textbf{C} Variability
+
+\begin{minipage}[b]{1\linewidth}
+  \large
+  \textbf{A}
+  \includegraphics[width=9cm]{reliability_singleton_md.png}
+  \textbf{B}
+  \includegraphics[width=9cm]{dti_dki.png}
+  \textbf{C}
+  \includegraphics[width=9cm]{dti_1000_dki.png}
 \end{minipage}
+
+\subsubsection*{Fractional anisotropy}
+
+\textbf{A} Single subject distributions. \textbf{B} Bias \textbf{C} Variability
+
+\begin{minipage}[b]{1\linewidth}
+  \large
+  \textbf{A}
+  \includegraphics[width=9cm]{reliability_singleton_fa.png}
+  \textbf{B}
+  \includegraphics[width=9cm]{fa_bias.png}
+  \textbf{C}
+  \includegraphics[width=9cm]{fa_spread.png}
+\end{minipage}
+
+
+
+%----------------------------------------------------------------------------
+%	MATERIALS AND METHODS
+%----------------------------------------------------------------------------
+\normalsize
+\section*{Materials and Methods}
+\vspace{-10mm}
+\subsection*{Data}
+Measurements were obtained from the WU-Minn Human Connectome Project consortium
+(\texttt{https://www.humanconnectome.org/}) through AWS S3
+
+\noindent Of the 900 subjects that are available, 788 subjects have full
+diffusion measurements: 270 diffusion weighted directions in 3 different
+b-values (90 directions each): 1,000, 2,000 and 3,000 $s/mm^2$, collected at
+1.25 x 1.25 x 1.25 $mm^3$ resolution.
+
+\noindent \emph{Freesurfer} segmentation from a T1-weighted measurement was also
+we focused our analysis only on the parts of the volume that contained the white
+matter.
+\vspace{-10mm}
+
+
+\color{DarkSlateGray}
+\subsection*{Analysis}
+
+We used a 36-node Amazon Web Services compute cluster containing 36 nodes. AWS
+\emph{r3.2xlarge} instances were used, optimized for memory-intensive
+applications: each instance has 8 vCPU, 61 GiB Memory and 160 GB SSD storage.
+
+\noindent We used DTI and DKI implementations that are part of the DIPY
+open-source software library (\texttt{http://dipy.org/}) \cite{Garyfallidis2014FrontNeuroinf}. 5-fold cross-validation was implemented using DIPY's cross-validation module \cite{Rokem2015PLoS}
+
+\noindent Computation was distributed using Apache Spark, an open-source
+parallel processing framework that coordinates computation across distributed
+clusters (\texttt{http://spark.apache.org/}). Because model-fitting requires
+large amounts of memory, each compute node ran one Spark worker.
+
+\hspace{2 mm}
+\includegraphics[height=3.5cm]{AWS.png}
+\hspace{2 mm}
+\includegraphics[height=3.5cm]{dipy-logo.png}
+\hspace{2 mm}
+\includegraphics[height=3.5cm]{spark-logo.png}
+\hspace{2 mm}
+
+
+%------------------------------------------------
 
 \color{SaddleBrown} % SaddleBrown color for the conclusions to make them stand out
 
@@ -288,17 +309,6 @@ lend themselves to a richer biophysical interpretation of the signal.
 
 \color{DarkSlateGray} % Set the color back to DarkSlateGray for the rest of the content
 
-%----------------------------------------------------------------------------%	Future directions
-%----------------------------------------------------------------------------
-
-\section*{Future directions}
-\begin{itemize}
-
-\item Foo
-
-\item Bar
-
-\end{itemize}
 %---------------------------------------------------------------------------	REFERENCES
 %----------------------------------------------------------------------------
 

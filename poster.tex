@@ -84,7 +84,7 @@
 
 Diffusion MRI (dMRI) measurements provide detailed information about human brain
 connectivity and microstructure \emph{in vivo}. HCP is measuring high-quality
-multi-modal MRI data from 1,200 individuals and make these data publcly
+multi-modal MRI data from 1,200 individuals and making these data publcly
 available \cite{VanEssen2012}. It has already made measurements from
 approximately 900 subjects available through Amazon's Simple Storage Service
 (S3).
@@ -218,8 +218,8 @@ $s/mm^2$  \hfill \break
 statistics based on a difference in FA/MD between b=1000 and b=1000,2000 (DTI)
 or between b=1000,2000, b=1000,3000 (DKI).
 
-\noindent BIAS is the median difference between sub-samples VARIABILITY is
-the spread of differences (central 95\% of the distribution)
+\noindent BIAS is the median difference between sub-samples VARIABILITY is the
+range of the differences (the range of the central 95\% of the distribution).
 
 \subsubsection*{Mean diffusivity}
 
@@ -263,7 +263,7 @@ the spread of differences (central 95\% of the distribution)
 \vspace{-10mm}
 \subsection*{Data}
 Measurements were obtained from the WU-Minn Human Connectome Project consortium
-(\texttt{https://www.humanconnectome.org/}) through AWS S3
+(\texttt{https://www.humanconnectome.org/}) through AWS S3.
 
 \noindent Of the 900 subjects that are available, 788 subjects have full
 diffusion measurements: 270 diffusion weighted directions in 3 different
@@ -271,9 +271,8 @@ b-values (90 directions each): 1,000, 2,000 and 3,000 $s/mm^2$, collected at
 1.25 x 1.25 x 1.25 $mm^3$ resolution.
 
 \noindent \emph{Freesurfer} segmentation from a T1-weighted measurement was also
-we focused our analysis only on the parts of the volume that contained the white
-matter.
-\vspace{-10mm}
+used. We focused our analysis only on the parts of the volume that contained the
+white matter. \vspace{-10mm}
 
 
 \color{DarkSlateGray}

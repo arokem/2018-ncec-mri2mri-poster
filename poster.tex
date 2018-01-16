@@ -103,29 +103,18 @@ allow better characterization of tissue properties.
 We used the IXI dataset (\url{http://brain-development.org/ixi-dataset/}): T1w, T2w, PD, MRA, and DWI (16 directions, at b-value of 1000, one b=0) for N=567 subjects are available. A convolutional neural network was trained to learn the mapping between different MRI images in a training set (n=338).  We used a U-net architecture \cite{Ronneberger2015-ua}, with loss evaluated on “perceptual loss” \cite{Johnson2016-ac}: the activation of the first layer of a pretrained VGG16 network \cite{Simonyan2014-ua}, a  cost function that induces image similarity and prevents over-smoothing. Training used the Adam optimizer (learning rate: 0.0002). The implementation used Pytorch (https://pytorch.org).
 A group of participants (n=79), set aside as a test set (not shown to the algorithm during training) was used to evaluate registration. We used a state-of-the-art registration algorithm \cite{Avants2008-sa}, implemented in DIPY \cite{Garyfallidis2014-el} to register DWI b=0 to corresponding T1w images, using a mutual information metric to find the best affine transformation for registration. To simulate participant motion, known rotation and translation were applied to the b=0 image and the T1w was registered to the b=0. For comparison, we also synthesized a T1w-analog from the b=0 image using the DL network and used the synthesized image with the same registration algorithm. Registration errors were calculated relative to known ground truth as mean absolute error (MAE), for translation and rotation components of the registration.
 
-\begin{minipage}[b]{0.5\linewidth}
-\includegraphics[width=15cm]{unet.png}
+\begin{minipage}[b]{\linewidth}
+\includegraphics[width=\linewidth]{unet.png}
 \center U-Net architecture
 \end{minipage}
 \\
-\rule{\linewidth}{0.4pt}
-
-\section*{Other applications}
-
-\begin{minipage}[t]{1\linewidth}
-\includegraphics[width=18cm]{octa.png}
-\\
-AI-synthesized retinal perfusion images in patients with diseases that were not part of the training set.
-\end{minipage}
 \columnbreak
 
 %----------------------------------------------------------------------------%	RESULTS
 %----------------------------------------------------------------------------
 \color{Navy}
 \section*{Results}
-
 \subsection*{Accurate MRI image synthesis}
-
 The DL algorithm learns the mapping between different contrasts. It can be trained for either one-to-one mappings (e.g, T1w $\rightarrow$ PD, Figure 1 left, or T1w $\rightarrow$ T2w, Figure 1 righ), or many-to-one mappings (e.g., T1w + T2w + PD $\rightarrow$ MRA, Figure 2). High accuracy is achieved by learning both mappings on the individual voxel level, as well as overall global structure. For example, the algorithm learns to disregard the ventricles in the mapping to MRA, despite the fact that the ventricles have similar pixel values in T1w, T2w and PD images to blood vessels.
 
 \begin{minipage}[b]{1.0\linewidth}
@@ -133,8 +122,8 @@ The DL algorithm learns the mapping between different contrasts. It can be train
   \center AI-synthesized images of proton density (left) or T2-weighted images from a T1-weighted image
 \end{minipage}
 
-\begin{minipage}[t]{\linewidth}
-    \includegraphics[width=\linewidth]{MRA.png}
+\begin{minipage}[t]{0.8\linewidth}
+    \includegraphics[width=0.8\linewidth]{MRA.png}
     \center AI-synthesized MRA images from T1w + T2w + PD images.
 \end{minipage}
 
@@ -143,14 +132,22 @@ The DL algorithm learns the mapping between different contrasts. It can be train
 The algorithm was trained to synthesize T1w images from the DWI b=0 images. On a separate set of subjects, not used during training, we demonstrate that registration of T1w to DWI b=0 is more accurate using a synthesized T1w intermediary. This effect is shown here as mean absolute error (MAE; Figure 2) and is consistent both for the translation component (Mann Whitney U test, p $<$ 10e-7) and for rotation (Mann Whitney U test p $<$ 10e-4)
 
 \begin{minipage}[t]{1.0\linewidth}
-    \includegraphics[width=\linewidth]{motion_correction.png}
+    \includegraphics[width=0.8\linewidth]{motion_correction.png}
 \end{minipage}
 
+\section*{Other applications}
+
+\begin{minipage}[t]{1\linewidth}
+\includegraphics[width=0.7\linewidth]{octa.png}
+\\
+AI-synthesized retinal perfusion images in patients with diseases that were not part of the training set.
+\end{minipage}
 
 %------------------------------------------------
 \color{SaddleBrown} % SaddleBrown color for the conclusions to make them stand out
 
 \section*{Conclusions}
+
 \large
 \begin{itemize}
 

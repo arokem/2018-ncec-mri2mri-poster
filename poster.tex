@@ -34,7 +34,7 @@
 \usepackage[font=small,labelfont=bf]{caption} % Required for specifying captions to tables and figures
 \usepackage{amsfonts, amsmath, amsthm, amssymb} % For math fonts, symbols and environments
 \usepackage{wrapfig} % Allows wrapping text around tables and figures
-
+\usepackage{url}
 \begin{document}
 
 %----------------------------------------------------------------------------------------
@@ -47,12 +47,12 @@
 % The third is 19% wide and houses a logo for your university/organization or a photo of you
 % The widths of these boxes can be easily edited to accommodate your content as you see fit
 
-\begin{minipage}[b]{0.85\linewidth}
-\veryHuge \color{NavyBlue} \textbf{Diffusion Kurtosis Imaging for the Human Connectome Project} \color{Black}\\ % Title
+\begin{minipage}[b]{0.9\linewidth}
+\veryHuge \color{NavyBlue} \textbf{{\tt MRI2MRI}: A deep convolutional network that accurately transforms between brain MRI contrasts} \color{Black}\\ % Title
 %\Huge\textit{An Exploration of Complexity}\\[1cm] % Subtitle
-\huge \textbf{Ariel Rokem\textsuperscript{1}, Libby Huber\textsuperscript{2}, Parmita Mehta\textsuperscript{3}, Rafael Neto Henriques\textsuperscript{4}, Magda Balazinska\textsuperscript{3} \& Jason Yeatman\textsuperscript{2}}\\ % Author(s)
-\Large 1. The eScience Institute, 2. ILABS, 3. Computer Science and Engineering, Univ. of Washington \& 4. MRC Cognition and Brain Sci., Univ. of Cambridge\\ % University/organization
-\Large Contact: \texttt{arokem@uw.edu} $|$ Download: \texttt{http://arokem.org/presentations/sfn2016.html}
+\huge \textbf{Sa Xiao\textsuperscript{1}, Yue Wu\textsuperscript{1}, Aaron Lee\textsuperscript{1}, \& Ariel Rokem\textsuperscript{2}}\\ % Author(s)
+\Large 1. The Department of Ophthalmology, The University of Washington \\ 2. The eScience Institute, The University of Washington \\% University/organization
+\Large Contact: \texttt{arokem@uw.edu} $|$ Download: \texttt{http://arokem.github.io/2018-ncec-mri2mri-poster/poster.pdf}
 \end{minipage}
 %
 %\begin{minipage}[b]{0.25\linewidth}
@@ -64,9 +64,8 @@
 %Email: \texttt{john@LaTeXTemplates.com}\\ % Email address
 %\end{minipage}
 %
-\begin{minipage}[b]{0.19\linewidth}
+\begin{minipage}[b]{0.1\linewidth}
 \includegraphics[width=10cm]{UWlogo.png}
-\includegraphics[width=8cm]{Camlogo.png}
 \end{minipage}
 
 \vspace{0.5cm} % A bit of extra whitespace between the header and poster content
@@ -80,240 +79,88 @@
 
 \section*{Introduction}
 
-\subsection*{The Human Connectome Project}
+MRI creates images that are sensitive to different aspects of the tissue, and
+susceptible to different imaging artifacts. The relationships between different
+imaging contrasts are nonlinear and spatially- and tissue-dependent
+\cite{Vymazal1995-zo}. This poses several difficulties in the interpretation of
+multi-modal MRI. For example, analysis that requires accurate registration of
+images into the same coordinate frame currently requires the use of algorithms
+that can match images with different contrasts \cite{Klein2009-gq}. While this
+often works well, these algorithms can be over-sensitive to large, prominent
+features, such as edges of the tissue, and are more error-prone when images
+have low SNR, or represent very different features. Moreover, a better
+understanding of complementary information provided in different contrasts will
+allow better characterization of tissue properties.
 
-Diffusion MRI (dMRI) measurements provide detailed information about human brain
-connectivity and microstructure \emph{in vivo}. HCP is measuring high-quality
-multi-modal MRI data from 1,200 individuals and making these data publcly
-available \cite{VanEssen2012}. It has already made measurements from
-approximately 900 subjects available through Amazon's Simple Storage Service
-(S3).
-
-\subsection*{What model should we use to explain the data?}
-
-\subsection*{Diffusion Tensor Imaging (DTI): 6 parameters}
-
-Approximates diffusion in every voxel as a Gaussian distribution
-\cite{Basser1994-hg}:
-
-\vspace{2mm}
-\begin{center}
-\begin{large}
-
-$S(\theta, b) = S_0 e^{\theta^T \mathbf{Q} \theta} $
-
-\end{large}
-\end{center}
-
-\noindent $b$ is the \textbf {b-value},
-
-\noindent $S_0$ is the signal in the absence of diffusion gradient sensitization ($b=0$)
-
-\noindent $\mathbf{Q}$ is a positive-definite quadratic form:
-
-\vspace{2mm}
-\begin{center}
-
-$\mathbf{D} = \begin{pmatrix} \sigma_{xx} & \sigma_{xy} & \sigma_{xz} \\
-                              \sigma_{yx} & \sigma_{yy} & \sigma_{yz} \\
-				                      \sigma_{zx} & \sigma_{zy} & \sigma_{zz} \\
-\end{pmatrix} $
-
-\end{center}
-
-\subsection*{Diffusion Kurtosis imaging (DKI): 21 parameters}
-
-DKI is an extension of DTI that accounts for non-Gaussian behavior in complex tissue, with many barriers to the diffusion process (cell membranes,
-myelin sheaths, etc.) \cite{Jensen2005-vr}:
-
-\vspace{2mm}
-\begin{center}
-\begin{large}
-
-$ S(\theta, b)=S_{0}e^{-bD(\theta)+\frac{1}{6}b^{2}D(\theta)^{2}K(\theta)}$
-
-\vspace{2mm}
-\end{large}
-\end{center}
-
-\vspace{2mm}
-\begin{center}
-\begin{large}
-
-$D(\theta)=\sum_{i=1}^{3}\sum_{j=1}^{3}\theta_{i}\theta_{j}Q_{ij}$
-
-\vspace{2mm}
-\end{large}
-\end{center}
-
-\vspace{2mm}
-\begin{center}
-\begin{large}
-
-$K(\theta)=\frac{MD^{2}}{D(\theta)^{2}}\sum_{i=1}^{3}\sum_{j=1}^{3}\sum_{k=1}^{3} \sum_{l=1}^{3}\theta_{i}\theta_{j}\theta_{k}\theta_{l}W_{ijkl}$
-
-\vspace{2mm}
-\end{large}
-\end{center}
-
-$\mathbf{W}$ is a rank 4 tensor (3-by-3-by-3-by-3 matrix).
-
-\vspace{-2mm}
-\subsection*{Diffusion Statistics}
-
-\begin{itemize}
-
-\item Mean diffusivity (\textbf{MD}) characterizes the mean displacement of
-water molecules within a voxel.
-
-\item Fractional anisotropy (\textbf{FA}) characterizes the variance in
-diffusivity in different directions.
-
-\end{itemize}
-
-\large
-
-\noindent \textbf{Brain measurements that provide a close tie between brain tissue properties and behavior}.
-
-\vfill
-\columnbreak
-
-\color{Navy}
-%----------------------------------------------------------------------------%	RESULTS
-%----------------------------------------------------------------------------
-\section*{Results}
-
-\noindent \textbf{We compared DKI and DTI using \emph{K-fold cross-validation}}
-
-\noindent \textbf{We estimated model fit \emph{accuracy} and model parameter \emph{reliability}}
-
-
-\subsection*{Model accuracy}
-\normalsize
-
-\noindent Cross-validated $R^2$: \textbf{A} Comparison of the full distribution
-in a single subject, and comparison of the median (dashed line) in all subjects
-for DKI (all b-values) and DTI (\textbf{B} all b-values, \textbf{C} only b=1,000
-$s/mm^2$  \hfill \break
-
-\begin{minipage}[b]{1\linewidth}
-  \large
-  \begin{minipage}[b]{0.33\linewidth}
-  \textbf{A}\\
-  \includegraphics[width=11.5cm]{histogram_cod_dki_dti.png}
-  \end{minipage}
-  \begin{minipage}[b]{0.33\linewidth}
-  \textbf{B}\\
-  \includegraphics[width=11.5cm]{cod_dti_dki.png}
-  \end{minipage}
-  \begin{minipage}[b]{0.33\linewidth}
-  \textbf{C}\\
-  \includegraphics[width=11.5cm]{dti_1000_dki.png}
-  \end{minipage}
-\end{minipage}
-
-\subsection*{Parameter reliability}
-
-\noindent Parameter reliability is estimated by comparing diffusion-based
-statistics based on a difference in FA/MD between b=1000 and b=1000,2000 (DTI)
-or between b=1000,2000, b=1000,3000 (DKI).
-
-\noindent BIAS is the median difference between sub-samples VARIABILITY is the
-range of the differences (the range of the central 95\% of the distribution).
-
-\subsubsection*{Mean diffusivity}
-
-\begin{minipage}[b]{1\linewidth}
-  \begin{minipage}[b]{0.33\linewidth}
-  \center Single subject distributions\\
-  \includegraphics[width=11.5cm]{reliability_singleton_md.png}
-  \end{minipage}
-  \begin{minipage}[b]{0.33\linewidth}
-    \center Bias\\
-    \includegraphics[width=11.5cm]{md_bias.png}
-  \end{minipage}
-  \begin{minipage}[b]{0.33\linewidth}
-    \center Variability\\
-  \includegraphics[width=11.5cm]{md_spread.png}
-  \end{minipage}
-\end{minipage}
-
-\subsubsection*{Fractional anisotropy}
-
-\begin{minipage}[b]{1\linewidth}
-  \begin{minipage}[b]{0.33\linewidth}
-  \center Single subject distributions\\
-  \includegraphics[width=11.5cm]{reliability_singleton_fa.png}
-  \end{minipage}
-  \begin{minipage}[b]{0.33\linewidth}
-    \center Bias\\
-    \includegraphics[width=11.5cm]{fa_bias.png}
-  \end{minipage}
-  \begin{minipage}[b]{0.33\linewidth}
-    \center Variability\\
-  \includegraphics[width=11.5cm]{fa_spread.png}
-  \end{minipage}
-\end{minipage}
+\rule{\linewidth}{0.4pt}
 
 %----------------------------------------------------------------------------
 %	MATERIALS AND METHODS
 %----------------------------------------------------------------------------
 \normalsize
 \section*{Materials and Methods}
-\vspace{-10mm}
-\subsection*{Data}
-Measurements were obtained from the WU-Minn Human Connectome Project consortium
-(\texttt{https://www.humanconnectome.org/}) through AWS S3.
 
-\noindent Of the 900 subjects that are available, 788 subjects have full
-diffusion measurements: 270 diffusion weighted directions in 3 different
-b-values (90 directions each): 1,000, 2,000 and 3,000 $s/mm^2$, collected at
-1.25 x 1.25 x 1.25 $mm^3$ resolution.
+We used the IXI dataset (\url{http://brain-development.org/ixi-dataset/}): T1w, T2w, PD, MRA, and DWI (16 directions, at b-value of 1000, one b=0) for N=567 subjects are available. A convolutional neural network was trained to learn the mapping between different MRI images in a training set (n=338).  We used a U-net architecture \cite{Ronneberger2015-ua}, with loss evaluated on “perceptual loss” \cite{Johnson2016-ac}: the activation of the first layer of a pretrained VGG16 network \cite{Simonyan2014-ua}, a  cost function that induces image similarity and prevents over-smoothing. Training used the Adam optimizer (learning rate: 0.0002). The implementation used Pytorch (https://pytorch.org).
+A group of participants (n=79), set aside as a test set (not shown to the algorithm during training) was used to evaluate registration. We used a state-of-the-art registration algorithm \cite{Avants2008-sa}, implemented in DIPY \cite{Garyfallidis2014-el} to register DWI b=0 to corresponding T1w images, using a mutual information metric to find the best affine transformation for registration. To simulate participant motion, known rotation and translation were applied to the b=0 image and the T1w was registered to the b=0. For comparison, we also synthesized a T1w-analog from the b=0 image using the DL network and used the synthesized image with the same registration algorithm. Registration errors were calculated relative to known ground truth as mean absolute error (MAE), for translation and rotation components of the registration.
 
-\noindent \emph{Freesurfer} segmentation from a T1-weighted measurement was also
-used. We focused our analysis only on the parts of the volume that contained the
-white matter. \vspace{-10mm}
+\begin{minipage}[b]{0.5\linewidth}
+\includegraphics[width=15cm]{unet.png}
+\center U-Net architecture
+\end{minipage}
+\\
+\rule{\linewidth}{0.4pt}
 
+\section*{Other applications}
 
-\color{DarkSlateGray}
-\subsection*{Analysis}
+\begin{minipage}[t]{1\linewidth}
+\includegraphics[width=18cm]{octa.png}
+\\
+AI-synthesized retinal perfusion images in patients with diseases that were not part of the training set.
+\end{minipage}
+\columnbreak
 
-We used an Amazon Web Services compute cluster with 36 nodes. AWS
-\emph{r3.2xlarge} instances were used, optimized for memory-intensive
-applications: each instance has 8 vCPU, 61 GiB Memory and 160 GB SSD storage.
+%----------------------------------------------------------------------------%	RESULTS
+%----------------------------------------------------------------------------
+\color{Navy}
+\section*{Results}
 
-\noindent We used DTI and DKI implementations that are part of the DIPY
-open-source software library (\texttt{http://dipy.org/}) \cite{Garyfallidis2014FrontNeuroinf}. 5-fold cross-validation was implemented using DIPY's cross-validation module \cite{Rokem2015PLoS}
+\subsection*{Accurate MRI image synthesis}
 
-\noindent Computation was distributed using Apache Spark, an open-source
-parallel processing framework that coordinates computation across distributed
-clusters (\texttt{http://spark.apache.org/}). Because model-fitting requires
-large amounts of memory, each compute node ran one Spark worker.
+The DL algorithm learns the mapping between different contrasts. It can be trained for either one-to-one mappings (e.g, T1w $\rightarrow$ PD, Figure 1 left, or T1w $\rightarrow$ T2w, Figure 1 righ), or many-to-one mappings (e.g., T1w + T2w + PD $\rightarrow$ MRA, Figure 2). High accuracy is achieved by learning both mappings on the individual voxel level, as well as overall global structure. For example, the algorithm learns to disregard the ventricles in the mapping to MRA, despite the fact that the ventricles have similar pixel values in T1w, T2w and PD images to blood vessels.
 
-\hspace{2 mm}
-\includegraphics[height=3.5cm]{AWS.png}
-\hspace{2 mm}
-\includegraphics[height=3.5cm]{dipy-logo.png}
-\hspace{2 mm}
-\includegraphics[height=3.5cm]{spark-logo.png}
-\hspace{2 mm}
+\begin{minipage}[b]{1.0\linewidth}
+  \includegraphics[width=\linewidth]{mri2mri.png}
+  \center AI-synthesized images of proton density (left) or T2-weighted images from a T1-weighted image
+\end{minipage}
 
-\noindent Analysis software: \texttt{http://github.com/arokem/dki-accuracy-reliability}
+\begin{minipage}[t]{\linewidth}
+    \includegraphics[width=\linewidth]{MRA.png}
+    \center AI-synthesized MRA images from T1w + T2w + PD images.
+\end{minipage}
+
+\subsection*{Application: multi-modal image registration}
+
+The algorithm was trained to synthesize T1w images from the DWI b=0 images. On a separate set of subjects, not used during training, we demonstrate that registration of T1w to DWI b=0 is more accurate using a synthesized T1w intermediary. This effect is shown here as mean absolute error (MAE; Figure 2) and is consistent both for the translation component (Mann Whitney U test, p $<$ 10e-7) and for rotation (Mann Whitney U test p $<$ 10e-4)
+
+\begin{minipage}[t]{1.0\linewidth}
+    \includegraphics[width=\linewidth]{motion_correction.png}
+\end{minipage}
+
 
 %------------------------------------------------
-
 \color{SaddleBrown} % SaddleBrown color for the conclusions to make them stand out
 
 \section*{Conclusions}
 \large
 \begin{itemize}
 
-\item DKI more accurately fits the HCP data than DTI
+\item \texttt{MRI2MRI} accurately transforms between brain MRI contrasts
 
-\item DKI statistics are more reliable than DTI statistics
+\item This can be used to improve hard image processing tasks, such as cross-modal registration
 
-\item DKI has the additional benefit that it provides additional parameters that
-lend themselves to a richer biophysical interpretation of the signal.
+\item Does this discover physical properties of the tissue?
+
+\item Useful in other biomedical imaging data: OCTA, histology, ...
 
 \end{itemize}
 
@@ -330,15 +177,12 @@ lend themselves to a richer biophysical interpretation of the signal.
 %----------------------------------------------------------------------------
 \subsection*{Acknowledgements} \footnotesize This research was supported through
 a grant from the Gordon \& Betty Moore Foundation and the Alfred P. Sloan
-Foundation to the University of Washington eScience Institute, through NSF grant
-IIS-1247469, and through gifts from Amazon and the Intel Science and Technology
-Center for Big Data. We are also grateful for research cloud credits from Amazon
-Web Services, and for a Google Summer of Code 2015 fellowship to RNH.
+Foundation to the University of Washington eScience Institute.
 
 \includegraphics[height=2.6cm]{eSciencelogo.png}
 \includegraphics[height=2.6cm]{SloanLogo.png}
 \includegraphics[height=2.6cm]{MooreFdn.png}
-\includegraphics[height=2.6cm]{NSFLogo}
+
 %----------------------------------------------------------------------------
 
 \end{multicols}
